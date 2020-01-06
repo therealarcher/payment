@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include ('./partials/_head.ejs') %>
+  </head>
+
+  <body>
+    <%- include ('./partials/_header.ejs') %>
+    <form id="registration-form" class="text-center border border-light p-5" method="POST" action="/register">
+
+      <p class="h4 mb-4">Register</p>
+
+      <div class="form-row mb-4">
+        <div class="col">
+            <input type="text" id="RegisterFormFirstName" class="form-control" placeholder="First Name" name="first_name">
+        </div>
+      </div>
+      <div class="form-row mb-4">  
+        <div class="col">
+          <input type="text" id="RegisterFormLastName" class="form-control" placeholder="Last Name" name="last_name">
+        </div>
+      </div>
+      <div class="form-row mb-4">
+        <div class="col">
+          <input type="email" id="RegisterFormEmail" class="form-control" placeholder="E-mail" name="email">
+        </div>
+      </div>
+      <div class="form-row mb-4">  
+        <div class="col">
+          <input type="number" id="RegisterFormMobileNumber" class="form-control" placeholder="Mobile phone number" name="mobile_number">
+        </div>
+      </div>
+      <div class="form-row mb-4">
+        <div class="col">
+          <input type="number" id="RegisterFormCreditCard" class="form-control" placeholder="Credit card number" name="credit_card">
+        </div>
+      </div>
+      <div class="form-row mb-4">  
+        <div class="col">
+          <input type="password" id="RegisterFormPassword" class="form-control" placeholder="Password" name="password">
+        </div>
+      </div>
+      <div class="form-row mb-4">  
+        <div class="col">
+          <input type="password" id="RegisterFormPasswordVerify" class="form-control" placeholder="Verify Password" name="verify_password">
+        </div>
+      </div>
+      <button id="reg-submit-button" class="btn btn-success my-4 btn-block" type="submit">Register</button>
+
+  </body>
+</html>

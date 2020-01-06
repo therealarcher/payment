@@ -2,13 +2,20 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
+var cors = require("cors");
 dotenv.config();
+
+app.use(cors());
 
 // line below to simplify
 const queries = require("./queries");
 
 // setup port for deployment or port 3000 as local
-const port = process.env.PORT; // || 3000
+const port = process.env.PORT;
+
+// setup for ejs as view engine
+app.set("view engine", "ejs");
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(express.json());
@@ -21,17 +28,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // console.log(db);
 // db.connect();
 
-// app.get("/", (req, res) => {
-//   //   // res.send("home page");
-
-//   const getUsers = queries.getUsers;
-//   //   // console.log(getUsers());
+app.get("/", (req, res) => {
+  let templateVars = { title: "Payments Inc." };
+  res.render("home", templateVars);
+});
 
 //   res.json({ getUsers });
 // });
-
-// *** this works ***
-app.get("/", queries.getUsers);
 
 // app.get("/", (req, res) => res.send("testing123"));
 
@@ -40,21 +43,40 @@ app.get("/", queries.getUsers);
 //   res.send(getUsers());
 // });
 
+// *** this works for database query in queries.js ***
+app.get("/test", queries.getUsers);
+
 app.get("/register", (req, res) => {
-  res.send("registration page");
+  // let templateVars = { };
+  res.render("register");
 });
 
 app.post("/register", (req, res) => {
+  // res.send("post to /register");
   console.log(req.body);
-  res.send("post to /register");
+  for (let field in req.body) {
+    if (!req.body[field]) {
+      return res.send("Please fill out all fields");
+    }
+  }
+  var regData = `
+    insert into users (first_name, last_name, email, mobile_number, credit_card, password) 
+    VALUES ($1), [req.body.first_name]`;
+  // console.log(regData);
+
+  // res.render("thank you", {
+  //   title: "Data Saved",
+  //   message: "Registration successful"
+  // });
 });
 
 app.get("/login", (req, res) => {
-  res.send("login page");
+  res.render("login");
+  // res.redirect("/transfers");
 });
 
 app.get("/transfers", (req, res) => {
-  res.send("transfers status page");
+  res.render("transfers");
 });
 
 app.get("/transfers/new", (req, res) => {
@@ -62,7 +84,7 @@ app.get("/transfers/new", (req, res) => {
 });
 
 app.get("/approvals", (req, res) => {
-  res.send("List of approvals");
+  res.render("approvals");
 });
 
 app.listen(port, () => {

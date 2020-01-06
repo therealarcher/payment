@@ -14,6 +14,14 @@ const getUsers = (request, response) => {
   });
 };
 
+// const getUsers = db.query("SELECT * FROM users", (error, results) => {
+//   if (error) {
+//     throw error;
+//   }
+//   // console.log(results.rows);
+//   return results.rows;
+// });
+
 // const getUsers = db
 //   .query(
 //     `
