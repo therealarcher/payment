@@ -46,6 +46,11 @@ app.get("/", (req, res) => {
 // *** this works for database query in queries.js ***
 app.get("/test", queries.getUsers);
 
+// to serve up hardcoded data:
+// app.get("/test", (req, res) => {
+//   res.json({ name: "Jon", age: "40" });
+// });
+
 app.get("/register", (req, res) => {
   // let templateVars = { };
   res.render("register");
