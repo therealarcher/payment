@@ -72,22 +72,15 @@ app.post("/register", (req, res) => {
 
   // queries.createUser(formInputs).then(data => res.json(data.rows));
   queries.createUser(formInputs);
-  res.render("transfers");
-  // .then(data => data.render("transfers"));
+  // res.render("transfers");
+  res.render("thankyou", {
+    title: `Thank you ${first_name}!`,
+    message1: "Registration successful",
+    message2: "Please Select from options above"
+  });
 });
 
 // app.post("/register", queries.createUser);
-
-// var regData = `
-//   insert into users (first_name, last_name, email, mobile_number, credit_card, password)
-//   VALUES ($1), [req.body.first_name]`;
-// console.log(regData);
-
-// res.render("thank you", {
-//   title: "Data Saved",
-//   message: "Registration successful"
-// });
-// });
 
 app.get("/login", (req, res) => {
   res.render("login");
