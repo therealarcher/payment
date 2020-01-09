@@ -25,6 +25,37 @@ const createUser = inputs => {
     [first_name, last_name, email, mobile_number, credit_card, password]
   );
 };
+
+const createTransfer = inputs => {
+  const {
+    first_name,
+    last_name,
+    email,
+    bank_name,
+    transit_number,
+    routing_number,
+    amount
+  } = inputs;
+
+  pool.query(
+    "INSERT INTO user_transfers (first_name, last_name, email, bank_name, transit_number, routing_number, amount) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    [
+      first_name,
+      last_name,
+      email,
+      bank_name,
+      transit_number,
+      routing_number,
+      amount
+    ]
+  );
+};
+
+const getTransfers = () => {
+  return pool.query(
+    `SELECT first_name, last_name, amount, accepted FROM user_transfers`
+  );
+};
 // const createUser = (req, res) => {
 //   const { first_name, last_name, email } = req.body;
 
@@ -80,4 +111,4 @@ const createUser = inputs => {
 
 // const getUsers = () => "testing123";
 
-module.exports = { getUsers, createUser, test };
+module.exports = { getUsers, createUser, createTransfer, getTransfers, test };

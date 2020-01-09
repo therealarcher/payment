@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include ('./partials/_head.ejs') %>
+    <link rel="stylesheet" href="../styles/custom.css" type="text/css" />
+  </head>
+
+  <body>
+    <%- include ('./partials/_header.ejs') %>
+    <div id="reg-form">
+      <form
+        id="registration-form"
+        class="text-center border border-light p-5"
+        method="POST"
+        action="/transfers"
+      >
+        <p class="h4 mb-4">Transfer Money</p>
+
+        <div class="form-row mb-4">
+          <div class="col">
+            <input
+              type="text"
+              id="TransferFormFirstName"
+              class="form-control"
+              placeholder="Recipients First Name"
+              name="first_name"
+            />
+          </div>
+        </div>
+        <div class="form-row mb-4">
+          <div class="col">
+            <input
+              type="text"
+              id="TransferFormLastName"
+              class="form-control"
+              placeholder="Recipients Last Name"
+              name="last_name"
+            />
+          </div>
+        </div>
+        <div class="form-row mb-4">
+          <div class="col">
+            <input
+              type="email"
+              id="TransferFormEmail"
+              class="form-control"
+              placeholder="Recipients e-mail"
+              name="email"
+            />
+          </div>
+        </div>
+        <div class="form-row mb-4">
+          <div class="col">
+            <input
+              type="text"
+              id="TransferFormBankName"
+              class="form-control"
+              placeholder="Bank Name"
+              name="bank_name"
+            />
+          </div>
+        </div>
+        <div class="form-row mb-4">
+          <div class="col">
+            <input
+              type="number"
+              id="TransferFormTransitNumber"
+              class="form-control"
+              placeholder="Transit Number"
+              name="transit_number"
+            />
+          </div>
+        </div>
+        <div class="form-row mb-4">
+          <div class="col">
+            <input
+              type="number"
+              id="TransferFormRoutingNumber"
+              class="form-control"
+              placeholder="routing number"
+              name="routing_number"
+            />
+          </div>
+        </div>
+        <div class="form-row mb-4">
+          <div class="col">
+            <input
+              type="currency"
+              id="TransferFormAmount"
+              class="form-control"
+              placeholder="amount to send"
+              name="amount"
+            />
+          </div>
+        </div>
+        <button
+          id="reg-submit-button"
+          class="btn btn-success my-4 btn-block"
+          type="submit"
+        >
+          Send Now
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

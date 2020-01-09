@@ -54,6 +54,11 @@ app.get("/register", (req, res) => {
 app.post("/register", (req, res) => {
   // res.send("post to /register");
   console.log(req.body);
+  for (let field in req.body) {
+    if (!req.body[field]) {
+      return res.send("Please fill out all fields");
+    }
+  }
   let formInputs = req.body;
   const {
     first_name,
@@ -63,16 +68,9 @@ app.post("/register", (req, res) => {
     credit_card,
     password
   } = formInputs;
-  // console.log(first_name, last_name);
-  // for (let field in req.body) {
-  //   if (!req.body[field]) {
-  //     return res.send("Please fill out all fields");
-  //   }
-  // }
 
   // queries.createUser(formInputs).then(data => res.json(data.rows));
   queries.createUser(formInputs);
-  // res.render("transfers");
   res.render("thankyou", {
     title: `Thank you ${first_name}!`,
     message1: "Registration successful",
@@ -88,11 +86,33 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/transfers", (req, res) => {
-  res.render("transfers");
+  queries.getTransfers().then(data => res.json(data.rows));
+  // res.render("transfers");
 });
 
 app.get("/transfers/new", (req, res) => {
-  res.send("transfer form");
+  res.render("transfer-form");
+});
+
+app.post("/transfers", (req, res) => {
+  console.log("transfer form inputs: ", req.body);
+  let TransferFormInputs = req.body;
+  const {
+    first_name,
+    last_name,
+    email,
+    bank_name,
+    transit_number,
+    routing_number,
+    amount
+  } = TransferFormInputs;
+
+  queries.createTransfer(TransferFormInputs);
+  res.render("thankyou", {
+    title: `Thank you. You have sent ${amount} to ${first_name}`,
+    message1: `email to ${email} has been sent`,
+    message2: "Please Select from options above"
+  });
 });
 
 app.get("/approvals", (req, res) => {
