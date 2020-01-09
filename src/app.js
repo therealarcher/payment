@@ -33,23 +33,18 @@ app.get("/", (req, res) => {
   res.render("home", templateVars);
 });
 
-//   res.json({ getUsers });
-// });
-
-// app.get("/", (req, res) => res.send("testing123"));
-
-// app.get("/", (req, res) => {
-//   const getUsers = queries.getUsers;
-//   res.send(getUsers());
-// });
-
 // *** this works for database query in queries.js ***
-app.get("/test", queries.getUsers);
+// app.get("/test", queries.getUsers);
 
 // to serve up hardcoded data:
 // app.get("/test", (req, res) => {
 //   res.json({ name: "Jon", age: "40" });
 // });
+
+// ** the right pattern
+app.get("/test", (req, res) => {
+  queries.getUsers().then(data => res.json(data.rows));
+});
 
 app.get("/register", (req, res) => {
   // let templateVars = { };
@@ -59,21 +54,40 @@ app.get("/register", (req, res) => {
 app.post("/register", (req, res) => {
   // res.send("post to /register");
   console.log(req.body);
-  for (let field in req.body) {
-    if (!req.body[field]) {
-      return res.send("Please fill out all fields");
-    }
-  }
-  var regData = `
-    insert into users (first_name, last_name, email, mobile_number, credit_card, password) 
-    VALUES ($1), [req.body.first_name]`;
-  // console.log(regData);
+  let formInputs = req.body;
+  const {
+    first_name,
+    last_name,
+    email,
+    mobile_number,
+    credit_card,
+    password
+  } = formInputs;
+  // console.log(first_name, last_name);
+  // for (let field in req.body) {
+  //   if (!req.body[field]) {
+  //     return res.send("Please fill out all fields");
+  //   }
+  // }
 
-  // res.render("thank you", {
-  //   title: "Data Saved",
-  //   message: "Registration successful"
-  // });
+  // queries.createUser(formInputs).then(data => res.json(data.rows));
+  queries.createUser(formInputs);
+  res.render("transfers");
+  // .then(data => data.render("transfers"));
 });
+
+// app.post("/register", queries.createUser);
+
+// var regData = `
+//   insert into users (first_name, last_name, email, mobile_number, credit_card, password)
+//   VALUES ($1), [req.body.first_name]`;
+// console.log(regData);
+
+// res.render("thank you", {
+//   title: "Data Saved",
+//   message: "Registration successful"
+// });
+// });
 
 app.get("/login", (req, res) => {
   res.render("login");

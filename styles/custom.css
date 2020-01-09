@@ -1,0 +1,10 @@
+div #reg-form {
+  background-color: black;
+  padding: 300px;
+}
+
+.card,
+.btn,
+.form-control {
+  border-radius: 0;
+}
