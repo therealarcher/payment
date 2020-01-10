@@ -3,11 +3,10 @@ const app = express();
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 var cors = require("cors");
+const cookieParser = require("cookie-parser");
 dotenv.config();
 
-app.use(cors());
-
-// line below to simplify
+// all queries in this file
 const queries = require("./queries");
 
 // setup port for deployment or port 3000 as local
@@ -18,6 +17,8 @@ app.set("view engine", "ejs");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+app.use(cookieParser());
 // app.use(express.json());
 
 // PG database client/connection setup
@@ -29,7 +30,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // db.connect();
 
 app.get("/", (req, res) => {
-  let templateVars = { title: "Payments Inc." };
+  let templateVars = {
+    title: "Payments Inc.",
+    username: req.cookies["username"]
+  };
   res.render("home", templateVars);
 });
 
@@ -41,14 +45,14 @@ app.get("/", (req, res) => {
 //   res.json({ name: "Jon", age: "40" });
 // });
 
-// ** the right pattern
+// ** working pattern
 app.get("/test", (req, res) => {
   queries.getUsers().then(data => res.json(data.rows));
 });
 
 app.get("/register", (req, res) => {
-  // let templateVars = { };
-  res.render("register");
+  let templateVars = { username: req.cookies["username"] };
+  res.render("register", templateVars);
 });
 
 app.post("/register", (req, res) => {
@@ -71,6 +75,7 @@ app.post("/register", (req, res) => {
 
   // queries.createUser(formInputs).then(data => res.json(data.rows));
   queries.createUser(formInputs);
+  res.cookie("username", req.body.email);
   res.render("thankyou", {
     title: `Thank you ${first_name}!`,
     message1: "Registration successful",
@@ -81,17 +86,39 @@ app.post("/register", (req, res) => {
 // app.post("/register", queries.createUser);
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  let templateVars = { username: req.cookies["username"] };
+  res.render("login", templateVars);
   // res.redirect("/transfers");
 });
 
+app.post("/login", (req, res) => {
+  console.log(req.body.email);
+  let loginInputs = req.body;
+  const { email, password } = loginInputs;
+  // console.log(email, password);
+  // console.log(req.cookies);
+
+  res.cookie("username", req.body.email);
+  let templateVars = { username: req.cookies["username"] };
+
+  // console.log(username);
+  res.render("thankyou", {
+    title: "Thank you",
+    message1: "Login successful",
+    message2: "Please select from options above"
+  });
+});
+
+// getting a unhandled promise rejection.
 app.get("/transfers", (req, res) => {
-  queries.getTransfers().then(data => res.json(data.rows));
-  // res.render("transfers");
+  let templateVars = { username: req.cookies["username"] };
+  // let transferData = queries.getTransfers().then(data => res.json(data.rows));
+  res.render("transfers", { templateVars });
 });
 
 app.get("/transfers/new", (req, res) => {
-  res.render("transfer-form");
+  let templateVars = { username: req.cookies["username"] };
+  res.render("transfer-form", templateVars);
 });
 
 app.post("/transfers", (req, res) => {
@@ -116,7 +143,15 @@ app.post("/transfers", (req, res) => {
 });
 
 app.get("/approvals", (req, res) => {
-  res.render("approvals");
+  let templateVars = { username: req.cookies["username"] };
+  res.render("approvals", templateVars);
+});
+
+app.post("/logout", (req, res) => {
+  let templateVars = { username: req.cookies["username"] };
+  // req.cookies = null;
+  res.clearCookie("username", req.body.email);
+  res.redirect("/login");
 });
 
 app.listen(port, () => {
